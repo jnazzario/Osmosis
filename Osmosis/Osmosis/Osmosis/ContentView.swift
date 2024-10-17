@@ -1,228 +1,98 @@
 import SwiftUI
 
-// Card Model
-struct Card: Identifiable {
-    let id = UUID()
-    let rank: String
-    let suit: String
-}
-
-// Sample Data for demo purposes (replace with actual game logic)
-import SwiftUI
-
-
-// Sample Data for demo purposes (replace with actual game logic)
-let sampleTableau = [
-    [Card(suit: "♠", rank: "6"), Card(suit: "♥", rank: "10")],
-    [Card(suit: "♦", rank: "4")],
-    [Card(suit: "♣", rank: "K")],
-    [Card(suit: "♥", rank: "8")]
-]
-let sampleStockCard = Card(suit: "♠", rank: "3")
-
 struct ContentView: View {
     var body: some View {
         ZStack {
-            // Background color
+            // Background coloe
             Color(hex: "#285C4D")
-                .edgesIgnoringSafeArea(.all)
-
+                .ignoresSafeArea()
+            // Title
             VStack {
-                // Top bar with score and timer
-                HStack {
-                    Text("0")
-                        .font(.title)
-                        .padding(.leading)
-                    Spacer()
-                    Text("0:00")
-                        .font(.title)
-                        .padding(.trailing)
+                Text("Osmosis")
+                    .font(.largeTitle)
+                    .foregroundColor(.black)
+                    .padding()
+            // Card symbols
+                HStack{
+                    Image(systemName: "club.fill")
+                    Image(systemName: "spades.fill")
+                    Image(systemName: "diamond.fill")
+                    Image(systemName: "heart.fill")
                 }
-                .padding(.top)
-
-                // Tableau layout (stacked cards in columns)
-                HStack(alignment: .top, spacing: 20) {
-                    ForEach(sampleTableau, id: \.self) { column in
-                        VStack {
-                            ForEach(column) { card in
-                                CardView(card: card)
-                                    .padding(.bottom, 5)
-                            }
-                        }
-                    }
-                }
-                .padding(.vertical)
-
-                Spacer()
-
-                // Stockpile and other interactive elements
-                HStack {
+                .foregroundColor(.white)
+                .padding(.bottom)
+                
+                VStack{
                     Spacer()
-                    CardView(card: sampleStockCard)
                     Rectangle()
-                        .frame(width: 60, height: 90)
-                        .foregroundColor(.clear)
-                        .border(Color.black)
+                        .fill(LinearGradient(gradient: Gradient(colors: [.orange, .yellow]), startPoint: .top, endPoint: .bottom))
+                        .frame(width: 20)
                     Spacer()
                 }
-
-                Spacer()
-
-                // Bottom bar with buttons
-                HStack {
-                    Button("menu") {
-                        // Menu action
-                    }
-                    .buttonStyle(RoundedButtonStyle())
-
-                    Spacer()
-
-                    Button("hint") {
-                        // Hint action
-                    }
-                    .buttonStyle(RoundedButtonStyle())
-
-                    Spacer()
-
-                    Button(action: {
-                        // Undo action
-                    }) {
-                        Image(systemName: "arrow.uturn.left")
-                            .foregroundColor(.black)
-                            .padding()
-                    }
-                    .buttonStyle(RoundedButtonStyle())
-                }
-                .padding(.bottom, 20)
+                
             }
         }
     }
 }
 
-// Card View for individual cards
-struct CardView: View {
-    let card: Card
+// Extension to convert hex color to SwiftUI Color
+extension Color {
+    init?(hex: String) {
+        var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+        hexSanitized = hexSanitized.replacingOccurrences(of: "#", with: "")
 
+        var rgb: UInt64 = 0
+        Scanner(string: hexSanitized).scanHexInt64(&rgb)
+
+        let red = Double((rgb >> 16) & 0xFF) / 255.0
+        let green = Double((rgb >> 8) & 0xFF) / 255.0
+        let blue = Double(rgb & 0xFF) / 255.0
+
+        self.init(red: red, green: green, blue: blue)
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
+
+struct OsmosisHomePage: View {
     var body: some View {
         ZStack {
-            Rectangle()
-                .frame(width: 60, height: 90)
+            // Background
+            Color.teal.ignoresSafeArea()
+
+            // Title
+            Text("Osmosis")
+                .font(.largeTitle.bold())
                 .foregroundColor(.white)
-                .cornerRadius(5)
-                .shadow(radius: 2)
-                .border(Color.black)
-            Text("\(card.rank)\(card.suit)")
-           
+                .padding()
 
-let sampleStockCard = Card(rank: "3", suit: "♠")
-
-struct ContentView: View {
-    var body: some View {
-        ZStack {
-            // Background color
-            Color(hex: "#285C4D")
-                .edgesIgnoringSafeArea(.all)
-
-            VStack {
-                // Top bar with score and timer
-                HStack {
-                    Text("0")
-                        .font(.title)
-                        .padding(.leading)
-                    Spacer()
-                    Text("0:00")
-                        .font(.title)
-                        .padding(.trailing)
-                }
-                .padding(.top)
-
-                // Tableau layout (stacked cards in columns)
-                HStack(alignment: .top, spacing: 20) {
-                    ForEach(sampleTableau, id: \.self) { column in
-                        VStack {
-                            ForEach(column) { card in
-                                CardView(card: card)
-                                    .padding(.bottom, 5)
-                            }
-                        }
-                    }
-                }
-                .padding(.vertical)
-
-                Spacer()
-
-                // Stockpile and other interactive elements
-                HStack {
-                    Spacer()
-                    CardView(card: sampleStockCard)
-                    Rectangle()
-                        .frame(width: 60, height: 90)
-                        .foregroundColor(.clear)
-                        .border(Color.black)
-                    Spacer()
-                }
-
-                Spacer()
-
-                // Bottom bar with buttons
-                HStack {
-                    Button("menu") {
-                        // Menu action
-                    }
-                    .buttonStyle(RoundedButtonStyle())
-
-                    Spacer()
-
-                    Button("hint") {
-                        // Hint action
-                    }
-                    .buttonStyle(RoundedButtonStyle())
-
-                    Spacer()
-
-                    Button(action: {
-                        // Undo action
-                    }) {
-                        Image(systemName: "arrow.uturn.left")
-                            .foregroundColor(.black)
-                            .padding()
-                    }
-                    .buttonStyle(RoundedButtonStyle())
-                }
-                .padding(.bottom, 20)
+            // Card symbols
+            HStack {
+                Image(systemName: "clubs.fill")
+                Image(systemName: "spades.fill")
+                Image(systemName: "diamond.fill")
+                Image(systemName: "heart.fill")
             }
+            .foregroundColor(.white)
+            .padding(.bottom)
+
+            // Vertical lines
+            VStack {
+                Spacer()
+                Rectangle()
+                    .fill(LinearGradient(gradient: Gradient(colors: [.orange, .yellow]), startPoint: .top, endPoint: .bottom))
+                    .frame(width: 20)
+                Spacer()
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.black)
+
+            // Second vertical line
+            // ... (similar to the first line, but with different colors and placement)
         }
     }
 }
-
-// Card View for individual cards
-struct CardView: View {
-    let card: Card
-
-    var body: some View {
-        ZStack {
-            Rectangle()
-                .frame(width: 60, height: 90)
-                .foregroundColor(.white)
-                .cornerRadius(5)
-                .shadow(radius: 2)
-                .border(Color.black)
-            Text("\(card.rank)\(card.suit)")
-                .font(.largeTitle)
-                .foregroundColor(card.suit == "♥" || card.suit == "♦" ? Color(hex: "#D6001C") : Color.black)
-        }
-    }
-}
-
-// Button style for the menu, hint, and undo buttons
-struct RoundedButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .padding()
-            .background(Color(hex: "#86A397"))
-            .foregroundColor(.black)
-            .cornerRadius(10)
-            .scaleEffect(configuration.isPressed ? 0.9 : 1.0)
-    }
-}
-
