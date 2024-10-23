@@ -1,41 +1,70 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var naviPath = NavigationPath()
     var body: some View {
-        ZStack {
-            // Background coloe
-            Color(hex: "#285C4D")
-                .ignoresSafeArea()
-            // Title
-            VStack {
-                Text("Osmosis")
-                    .font(.largeTitle)
-                    .foregroundColor(.black)
-                    .padding()
-            // Card symbols
-                HStack{
-                    Image(systemName: "club.fill")
-                    Image(systemName: "spades.fill")
-                    Image(systemName: "diamond.fill")
-                    Image(systemName: "heart.fill")
-                }
-                .foregroundColor(.red)
-                .padding(.bottom)
+        NavigationStack(path: $naviPath) {
+            ZStack {
+                // Background color
+                Color(hex: "#3c7f72")
+                    .ignoresSafeArea()
+                Image("Background")
+                    .resizable()
+                    .scaledToFill()
+                    .edgesIgnoringSafeArea(.all)
+                    .opacity(1.0)
                 
-                VStack{
+                VStack {
                     Spacer()
-                    Rectangle()
-                        .fill(LinearGradient(gradient: Gradient(colors: [.orange, .yellow]), startPoint: .top, endPoint: .bottom))
-                        .frame(width: 20)
-                    Spacer()
-                }
                 
-            }
-        }
+                    // App title
+                    Text("Osmosis")
+                        .font(.custom("TAN - MON CHERI", size: 50))
+                        .foregroundColor(.black)
+                        .padding(.top, 39)
+                    
+                    // Card Suit Symbols below the title
+                    HStack(spacing: 0.25) {
+                        Image(systemName: "suit.club.fill")
+                        Image(systemName: "suit.spade.fill")
+                        Image(systemName: "suit.diamond.fill")
+                            .foregroundColor(Color(hex: "#D6001C"))
+                        Image(systemName: "suit.heart.fill")
+                            .foregroundColor(Color(hex: "#D6001C"))
+                    } // HStack end
+                    .font(.system(size: 45))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.leading, 9)
+                    
+                    
+                    NavigationLink(destination: GameView()) {
+                        Text("new deal")
+                            .font(.custom("TAN - MON CHERI", size: 30))
+                            .foregroundColor(Color(.black))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.leading, 125)
+                    } // NavLink End line 33
+                    .navigationBarHidden(true)// Hide navigation bar on the main view
+                    .navigationBarBackButtonHidden(true)
+                    
+                    NavigationLink(destination: InstructionsView()){
+                        Text("how to")
+                            .font(.custom("TAN - MON CHERI", size: 30))
+                            .foregroundColor(Color(.black))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.leading, 146)
+                    }
+                    Spacer()
+                } // VStack end
+                .padding()
+            } // ZStack end lin 6
+           .navigationBarHidden(true)// Hide navigation bar on the main view
+           .navigationBarBackButtonHidden(true)
+        } // NavigationView
     }
 }
 
-// Extension to convert hex color to SwiftUI Color
+// Extension to use hex colors in SwiftUI
 extension Color {
     init?(hex: String) {
         var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -58,41 +87,3 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-struct OsmosisHomePage: View {
-    var body: some View {
-        ZStack {
-            // Background
-            Color.teal.ignoresSafeArea()
-
-            // Title
-            Text("Osmosis")
-                .font(.largeTitle.bold())
-                .foregroundColor(.white)
-                .padding()
-
-            // Card symbols
-            HStack {
-                Image(systemName: "clubs.fill")
-                Image(systemName: "spades.fill")
-                Image(systemName: "diamond.fill")
-                Image(systemName: "heart.fill")
-            }
-            .foregroundColor(.white)
-            .padding(.bottom)
-
-            // Vertical lines
-            VStack {
-                Spacer()
-                Rectangle()
-                    .fill(LinearGradient(gradient: Gradient(colors: [.orange, .yellow]), startPoint: .top, endPoint: .bottom))
-                    .frame(width: 20)
-                Spacer()
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.black)
-
-            // Second vertical line
-            // ... (similar to the first line, but with different colors and placement)
-        }
-    }
-}
