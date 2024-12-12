@@ -85,6 +85,7 @@ struct TestView: View {
                         .padding(.bottom, 10)
                     }
                 }
+                
                 // Timer updates every second
                 .onAppear {
                     Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in

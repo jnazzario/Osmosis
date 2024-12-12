@@ -1,6 +1,5 @@
 import Foundation
 
-// MARK: - Card Model
 struct Card: Identifiable {
     let id = UUID()
     let suit: Suit
@@ -11,11 +10,19 @@ struct Card: Identifiable {
     }
 
     enum Rank: String, CaseIterable {
-        case ace = "A", two = "2", three = "3", four = "4", five = "5", six = "6", seven = "7", eight = "8", nine = "9", ten = "10", jack = "J", queen = "Q", king = "K"
+        case ace = "A", two = "2", three = "3", four = "4", five = "5", six = "6"
+        case seven = "7", eight = "8", nine = "9", ten = "10"
+        case jack = "J", queen = "Q", king = "K"
     }
 
     // Computed property to generate the image name for each card
     var imageName: String {
-        return "\(rank.rawValue)_of_\(suit.rawValue)"
+        "\(rank.rawValue)_of_\(suit.rawValue)"
+    }
+}
+
+extension Card: CustomStringConvertible {
+    var description: String {
+        "\(rank.rawValue.capitalized) of \(suit.rawValue.capitalized)"
     }
 }

@@ -1,253 +1,11 @@
 import SwiftUI
-////
-////struct GameView: View {
-////        // State variable to keep track of the elapsed time
-////        @State private var elapsedTime: Int = 0
-////
-////    var body: some View {
-////        GeometryReader { geometry in
-////            ZStack {
-////                // Background color
-////                Color(red: 0.1, green: 0.4, blue: 0.35).edgesIgnoringSafeArea(.all)
-////                    VStack {
-////                        // Top row (Score & Timer)
-////                        HStack {
-////                            // Score Counter (Box will eventually show score)
-////                            RoundedRectangle(cornerRadius: 10)
-////                                .fill(Color(red: 0.3529, green: 0.6980, blue: 0.6314))
-////                                .frame(width: geometry.size.width * 0.2, height: geometry.size.height * 0.05)
-////
-////                            Spacer()
-////
-////                            // Timer
-////                            RoundedRectangle(cornerRadius: 10)
-////                                .fill(Color(red: 0.3529, green: 0.6980, blue: 0.6314))
-////                                .frame(width: geometry.size.width * 0.2, height: geometry.size.height * 0.05)
-////                                .overlay(
-////                                    Text(timerString(from: elapsedTime))
-////                                        .font(.custom("TAN - MON CHERI", size: 16))
-////                                        .foregroundColor(.black)
-////                                ) // Overlay line 27
-////                        } // HStack line 15
-////                        .padding(.horizontal, 20)
-////                        .padding(.top, 10)
-////
-////                        Spacer()
-////
-////                        // Bottom row (menu, hint, and undo buttons)
-////                        HStack {
-////                            // Menu
-////                            NavigationLink(destination: ContentView()) {
-////                                Text("menu")
-////                                    .font(.custom("TAN - MON CHERI", size: 17))
-////                                    .foregroundColor(.black)
-////                                    .padding()
-////                                    .frame(width: geometry.size.width * 0.25)
-////                                    .background(Color(hex: "#5ab2a1"))
-////                                    .cornerRadius(20)
-////                            } // Button line 41
-////
-////                            Spacer()
-////
-////                            // Hint Button
-////                            Button(action: {}) {
-////                                Text("hint")
-////                                    .font(.custom("TAN - MON CHERI", size: 17))
-////                                    .foregroundColor(.black)
-////                                    .padding()
-////                                    .frame(width: geometry.size.width * 0.25)
-////                                    .background(Color(hex: "#5ab2a1"))
-////                                    .cornerRadius(20)
-////                            } // Button line 54
-////
-////                            Spacer()
-////
-////                            // Undo Button
-////                            Button(action: {}) {
-////                                Image(systemName: "arrow.uturn.backward")
-////                                    .foregroundColor(.yellow)
-////                                    .padding()
-////                                    .frame(width: geometry.size.width * 0.15, height: geometry.size.width * 0.15)
-////                                    .background(Color(hex: "#5ab2a1"))
-////                                    .clipShape(Circle())
-////                            } // Button line 67
-////                        } // HStack line 39
-////                        .padding(.horizontal, 20)
-////                        .padding(.bottom, 10)
-////                    } //VStack line 14
-////                } //ZStack line 11
-////
-////                // Timer updates every second
-////                .onAppear {
-////                    Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-////                        elapsedTime += 1
-////                    }
-////                } // onAppear line 80
-////            }
-////        }
-////    }
-////
-////        // Helper function to format time
-////        private func timerString(from seconds: Int) -> String {
-////            let minutes = seconds / 60
-////            let seconds = seconds % 60
-////            return String(format: "%d:%02d", minutes, seconds)
-////        }
-////
-////struct GameView_Previews: PreviewProvider {
-////    static var previews: some View {
-////        GameView()
-////    }
-////}
-////
-//
-//struct GameView: View {
-//    @StateObject private var viewModel = GameViewModel()
-//    @State private var elapsedTime: Int = 0
-//
-//    var body: some View {
-//        GeometryReader { geometry in
-//            ZStack {
-//                // Background color
-//                Color(red: 0.1, green: 0.4, blue: 0.35).edgesIgnoringSafeArea(.all)
-//
-//                HStack {
-//                    // Display Reserve Piles Vertically on the Left
-//                    VStack {
-//                        ForEach(0..<viewModel.reservePiles.count, id: \.self) { index in
-//                            VStack {
-//                                if let topCard = viewModel.reservePiles[index].last {
-//                                    CardView(card: topCard)
-//                                        .onTapGesture {
-//                                            for foundationIndex in 0..<viewModel.foundations.count {
-//                                                viewModel.moveCard(fromReserve: index, toFoundation: foundationIndex)
-//                                            }
-//                                        }
-//                                } else {
-//                                    EmptyPileView()
-//                                }
-//                            }
-//                            .padding(.bottom, 10)
-//                        }
-//                    }
-//                    .padding(.leading, 10)
-//
-//                    Spacer()
-//
-//                    VStack {
-//                        // Top row (Score & Timer)
-//                        HStack {
-//                            // Score Counter (Box will eventually show score)
-//                            RoundedRectangle(cornerRadius: 10)
-//                                .fill(Color(red: 0.3529, green: 0.6980, blue: 0.6314))
-//                                .frame(width: geometry.size.width * 0.2, height: geometry.size.height * 0.05)
-//
-//                            Spacer()
-//
-//                            // Timer
-//                            RoundedRectangle(cornerRadius: 10)
-//                                .fill(Color(red: 0.3529, green: 0.6980, blue: 0.6314))
-//                                .frame(width: geometry.size.width * 0.2, height: geometry.size.height * 0.05)
-//                                .overlay(
-//                                    Text(timerString(from: elapsedTime))
-//                                        .font(.custom("TAN - MON CHERI", size: 16))
-//                                        .foregroundColor(.black)
-//                                ) // Overlay line 27
-//                        } // HStack line 15
-//                        .padding(.horizontal, 20)
-//                        .padding(.top, 10)
-//
-//                        Spacer()
-//
-//                        // Display Foundation Piles
-//                        HStack {
-//                            ForEach(0..<viewModel.foundations.count, id: \.self) { index in
-//                                VStack {
-//                                    Text("Foundation \(index + 1)")
-//                                        .font(.headline)
-//                                        .foregroundColor(.white)
-//
-//                                    if let topCard = viewModel.foundations[index].last {
-//                                        CardView(card: topCard)
-//                                    } else {
-//                                        EmptyPileView()
-//                                    }
-//                                }
-//                               // .padding()
-//                            }
-//                        }
-//                      //  .padding()
-//
-//                       // Spacer()
-//
-//                        // Bottom row (menu, hint, and undo buttons)
-//                        HStack {
-//                            // Menu
-//                            NavigationLink(destination: ContentView()) {
-//                                Text("menu")
-//                                    .font(.custom("TAN - MON CHERI", size: 17))
-//                                    .foregroundColor(.black)
-//                                    .padding()
-//                                    .frame(width: geometry.size.width * 0.25)
-//                                    .background(Color(hex: "#5ab2a1"))
-//                                    .cornerRadius(20)
-//                            }
-//
-//                            Spacer()
-//
-//                            // Hint Button
-//                            Button(action: {}) {
-//                                Text("hint")
-//                                    .font(.custom("TAN - MON CHERI", size: 17))
-//                                    .foregroundColor(.black)
-//                                    .padding()
-//                                    .frame(width: geometry.size.width * 0.25)
-//                                    .background(Color(hex: "#5ab2a1"))
-//                                    .cornerRadius(20)
-//                            }
-//
-//                            Spacer()
-//
-//                            // Undo Button
-//                            Button(action: {}) {
-//                                Image(systemName: "arrow.uturn.backward")
-//                                    .foregroundColor(.yellow)
-//                                    .padding()
-//                                    .frame(width: geometry.size.width * 0.15, height: geometry.size.width * 0.15)
-//                                    .background(Color(hex: "#5ab2a1"))
-//                                    .clipShape(Circle())
-//                            }
-//                        }
-//                        .padding(.horizontal, 20)
-//                        .padding(.bottom, 10)
-//                    } // VStack end
-//                } // HStack end
-//            } // ZStack end
-//        } // GeometryReader end
-//        .onAppear {
-//            Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-//                elapsedTime += 1
-//            }
-//        }
-//    }
-//
-//    // Helper function to format time
-//    private func timerString(from seconds: Int) -> String {
-//        let minutes = seconds / 60
-//        let seconds = seconds % 60
-//        return String(format: "%d:%02d", minutes, seconds)
-//    }
-//}
-//
-//struct GameView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        GameView()
-//    }
-//}
-
 struct GameView: View {
-    @StateObject private var viewModel = GameViewModel()
-    @State private var elapsedTime: Int = 0
+    @StateObject private var viewModel = GameViewModel() // The view model that manages the game state
+    @State private var elapsedTime: Int = 0              // Timer for the game
+    @State private var gameTimer: Timer?                 // Timer instance
+    @State private var selectedCardIndex: Int? = nil     // Track which card is selected from the reserve piles
+    @State private var navigateToHome: Bool = false
+
 
     var body: some View {
         GeometryReader { geometry in
@@ -256,17 +14,20 @@ struct GameView: View {
                 Color(red: 0.1, green: 0.4, blue: 0.35).edgesIgnoringSafeArea(.all)
 
                 VStack {
-                    // Top row (Score and Timer)
+                    // Top row
                     HStack {
-                        // Score Counter
+                        // Score box
                         RoundedRectangle(cornerRadius: 10)
                             .fill(Color(red: 0.3529, green: 0.6980, blue: 0.6314))
                             .frame(width: geometry.size.width * 0.2, height: geometry.size.height * 0.05)
+                            .overlay(
+                                Text("\(viewModel.score)")
+                                    .font(.custom("TAN - MON CHERI", size: 16))
+                                    .foregroundColor(.black))
                             .padding(.leading, 20)
 
                         Spacer()
-
-                        // Timer at the top right
+                        // Timer box
                         RoundedRectangle(cornerRadius: 10)
                             .fill(Color(red: 0.3529, green: 0.6980, blue: 0.6314))
                             .frame(width: geometry.size.width * 0.2, height: geometry.size.height * 0.05)
@@ -277,12 +38,12 @@ struct GameView: View {
                             )
                             .padding(.trailing, 20)
                     }
-                    .padding(.top, 30)
+                    .padding(.top, 10)
 
                     Spacer()
 
                     // Display Reserve Piles and Foundations
-                    HStack {
+                    HStack(alignment: .top, spacing: -33) {
                         // Reserve Piles
                         ScrollView(.vertical) {
                             VStack(spacing: 5) {
@@ -291,12 +52,13 @@ struct GameView: View {
                                         if let topCard = viewModel.reservePiles[index].last {
                                             CardView(card: topCard)
                                                 .onTapGesture {
-                                                    for foundationIndex in 0..<viewModel.foundations.count {
-                                                        viewModel.moveCard(fromReserve: index, toFoundation: foundationIndex)
-                                                    }
+                                                    print("Tapped on reserve pile \(index), card: \(topCard.rank) of \(topCard.suit)") // Debug print
+                                                    selectedCardIndex = index
                                                 }
+                                                .border(selectedCardIndex == index ? Color.yellow : Color.clear, width: 2)
                                         } else {
-                                            EmptyPileView()
+                                            EmptyPileView {}
+
                                         }
                                     }
                                 }
@@ -306,45 +68,59 @@ struct GameView: View {
                         .frame(width: geometry.size.width * 0.2)
                         .padding(.leading, 20)
 
-                        Spacer()
-
                         // Foundation Piles
-                        VStack {
-                            Spacer()
-
-                            HStack(spacing: 10) {
-                                ForEach(0..<viewModel.foundations.count, id: \.self) { index in
-                                    VStack {
-                                        if let topCard = viewModel.foundations[index].last {
-                                            CardView(card: topCard)
-                                        } else {
-                                            EmptyPileView()
+                        VStack(spacing: 5) {
+                            ForEach(0..<viewModel.foundations.count, id: \.self) { foundationIndex in
+                                if viewModel.foundations[foundationIndex].isEmpty {
+                                    // Show Empty Pile View if the foundation pile is empty
+                                    EmptyPileView {
+                                        print("Tapped on empty pile at index \(foundationIndex)")
+                                        if let reserveIndex = selectedCardIndex {
+                                            // Attempt to move the selected card to the empty foundation pile
+                                            viewModel.moveCard(fromReserve: reserveIndex, toFoundation: foundationIndex)
+                                            selectedCardIndex = nil
                                         }
                                     }
-                                    .padding()
+                                    .frame(width: 100, height: 150)
+                                } else {
+                                    // Show Foundation Pile if it contains cards
+                                    ZStack(alignment: .leading) {
+                                        ForEach(viewModel.foundations[foundationIndex].indices, id: \.self) { cardIndex in
+                                            CardView(card: viewModel.foundations[foundationIndex][cardIndex])
+                                                .offset(x: CGFloat(cardIndex) * 15) // Card offset
+                                        }
+                                    }
+                                    .frame(width: 160, height: 120)
+                                    .onTapGesture {
+                                        if let reserveIndex = selectedCardIndex {
+                                            viewModel.moveCard(fromReserve: reserveIndex, toFoundation: foundationIndex)
+                                            selectedCardIndex = nil
+                                        }
+                                    }
                                 }
                             }
-                            .padding()
-
-                            Spacer()
                         }
-                    }
+                        .padding(.top, 10)
 
-                    Spacer()
 
-                    // Bottom row (menu, hint, and undo buttons)
-                    HStack(spacing: 45) {
-                        // Menu button
+                        Spacer()
+                    } // HStack end
+
+                    // Bottom row (menu, hint, undo, and stock pile)
+                    HStack {
+                        // Menu button on the bottom left
                         NavigationLink(destination: ContentView()) {
+
                             Text("menu")
                                 .font(.custom("TAN - MON CHERI", size: 17))
                                 .foregroundColor(.black)
                                 .padding()
-                                .frame(width: geometry.size.width * 0.25)
+                                .frame(width: geometry.size.width * 0.3)
                                 .background(Color(hex: "#5ab2a1"))
                                 .cornerRadius(20)
                         }
-                        .padding(15)
+                        .padding(.leading, 10)
+                        Spacer()
 
                         // Hint Button
                         Button(action: {}) {
@@ -352,13 +128,17 @@ struct GameView: View {
                                 .font(.custom("TAN - MON CHERI", size: 17))
                                 .foregroundColor(.black)
                                 .padding()
-                                .frame(width: geometry.size.width * 0.25)
+                                .frame(width: geometry.size.width * 0.2)
                                 .background(Color(hex: "#5ab2a1"))
                                 .cornerRadius(20)
                         }
 
+                        Spacer()
+
                         // Undo Button
-                        Button(action: {}) {
+                        Button(action: {
+                            viewModel.undoLastMove()
+                        }) {
                             Image(systemName: "arrow.uturn.backward")
                                 .foregroundColor(.yellow)
                                 .padding()
@@ -366,19 +146,57 @@ struct GameView: View {
                                 .background(Color(hex: "#5ab2a1"))
                                 .clipShape(Circle())
                         }
+
+                        .padding(.trailing, 10)
+                        Spacer()
+
+                        // Stock Pile in the bottom right corner
+                        VStack {
+                            if let topCard = viewModel.stockPile.last {
+                                CardView(card: topCard)
+                                    .onTapGesture {
+                                        // Handle tapping the stock pile (e.g., drawing a card)
+                                        viewModel.drawFromStock()
+                                    }
+                            } else {
+                                EmptyPileView {}
+                            }
+                        }
+                        .frame(width: geometry.size.width * 0.15, height: geometry.size.width * 0.2)
+                        Spacer()
+                        Spacer()
                         Spacer()
                     }
-                    .frame(maxWidth: .infinity, alignment: .center)
                     .padding(.bottom, 20)
-                }
-
+                } // VStack end
             } // ZStack end
+            .alert(isPresented: $viewModel.gameWon) {
+                Alert(
+                    title: Text("Congratulations!"),
+                    message: Text("You have won the game!"),
+                    primaryButton: .default(Text("New Deal?")) {
+                        startNewDeal() // Restart the game
+                    },
+                    secondaryButton: .cancel(Text("Return Home")){
+                        navigateToHome = true
+                    }
+                )
+            }
+            .navigationDestination(isPresented: $navigateToHome){
+                ContentView()
+            }
         } // GeometryReader end
         .onAppear {
-            Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-                elapsedTime += 1
-            }
-        }
+             startTimer() // Start the timer when the view appears
+         }
+         .onDisappear {
+             stopTimer() // Stop the timer when the view disappears
+         }
+         .onReceive(viewModel.$gameWon) { won in
+             if won {
+                 stopTimer() // Stop the timer when the game is won
+             }
+         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
     }
@@ -389,7 +207,29 @@ struct GameView: View {
         let seconds = seconds % 60
         return String(format: "%d:%02d", minutes, seconds)
     }
+    
+    // Helper function to start the timer
+    private func startTimer() {
+        stopTimer() // Ensure any existing timer is invalidated
+        gameTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+            elapsedTime += 1
+        }
+    }
+
+    // Helper function to stop the timer
+    private func stopTimer() {
+        gameTimer?.invalidate()
+        gameTimer = nil
+    }
+
+    // Start a new game and reset the timer
+    private func startNewDeal() {
+        viewModel.startNewGame()
+        elapsedTime = 0 // Reset the timer
+        startTimer() // Restart the timer
+    }
 }
+
 
 
 struct GameView_Previews: PreviewProvider {

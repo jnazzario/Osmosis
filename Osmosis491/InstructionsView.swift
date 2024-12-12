@@ -44,9 +44,9 @@ struct InstructionsView: View {
                         .background(Color(hex:"#D6001C"))
                         .cornerRadius(10)
                 }
-                }
-            .padding(.bottom, 40)
             }
+            .padding(.bottom, 40)
+        }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         }

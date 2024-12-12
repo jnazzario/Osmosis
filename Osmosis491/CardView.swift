@@ -1,6 +1,5 @@
 import SwiftUI
 
-// MARK: - CardView
 struct CardView: View {
     let card: Card
 
@@ -13,3 +12,4 @@ struct CardView: View {
             .shadow(radius: 5)
     }
 }
+
