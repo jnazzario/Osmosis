@@ -1,6 +1,7 @@
 import SwiftUI
 struct ContentView: View {
     @State private var naviPath = NavigationPath()
+    @State private var hasSavedGame: Bool = UserDefaults.standard.data(forKey: "SavedGame") != nil
     var body: some View {
         NavigationStack(path: $naviPath) {
             ZStack {
@@ -20,7 +21,7 @@ struct ContentView: View {
                     Text("Osmosis")
                         .font(.custom("TAN - MON CHERI", size: 50))
                         .foregroundColor(.black)
-                        .padding(.top, 39)
+                        .padding(.top, 25)
 
                     // Card Suit Symbols below the title
                     HStack(spacing: 0.25) {
@@ -37,9 +38,13 @@ struct ContentView: View {
                     .padding(.leading, 9)
 
                     // Link to GameView
-                    NavigationLink(destination: GameView()) {
+                    NavigationLink(destination: GameView(viewModel: {
+                        let newGameViewModel = GameViewModel()
+                        newGameViewModel.startNewGame() // Explicitly start a new game
+                        return newGameViewModel
+                    }())) {
                         Text("new deal")
-                            .font(.custom("TAN - MON CHERI", size: 30))
+                            .font(.custom("TAN - MON CHERI", size: 26))
                             .foregroundColor(Color(.black))
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.leading, 125)
@@ -48,11 +53,20 @@ struct ContentView: View {
                     // Hide navigation bar on the main view
                     .navigationBarHidden(true)
                     .navigationBarBackButtonHidden(true)
+                    
+                    if hasSavedGame{
+                        NavigationLink(destination: GameView(viewModel: GameViewModel())){
+                            Text("saved game")
+                            .font(.custom("TAN - MON CHERI", size: 26))
+                            .foregroundColor(Color(.black))
+                            .frame(maxWidth: .infinity)
+                        }
+                    }
 
                     // Link to InstructionsView
                     NavigationLink(destination: InstructionsView()){
                         Text("how to")
-                            .font(.custom("TAN - MON CHERI", size: 30))
+                            .font(.custom("TAN - MON CHERI", size: 26))
                             .foregroundColor(Color(.black))
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.leading, 146)

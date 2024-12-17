@@ -7,15 +7,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "F545B11E-3EBB-4F00-93B2-FD56AF3E8CC6"
+            uuid = "746F8FF1-8EA0-41F0-AC41-696C23BF6C0E"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Osmosis491/GameView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "62"
-            endingLineNumber = "62"
+            startingLineNumber = "192"
+            endingLineNumber = "192"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>

@@ -1,10 +1,11 @@
 import SwiftUI
 struct GameView: View {
-    @StateObject private var viewModel = GameViewModel() // The view model that manages the game state
+    @StateObject var viewModel = GameViewModel()         // The view model that manages the game state
     @State private var elapsedTime: Int = 0              // Timer for the game
     @State private var gameTimer: Timer?                 // Timer instance
     @State private var selectedCardIndex: Int? = nil     // Track which card is selected from the reserve piles
-    @State private var navigateToHome: Bool = false
+    @State private var navigateToHome: Bool = false      // Helps bring user to home screen
+    @State private var isPaused: Bool = false            // Tracks whether game is paused
 
 
     var body: some View {
@@ -106,29 +107,31 @@ struct GameView: View {
                         Spacer()
                     } // HStack end
 
-                    // Bottom row (menu, hint, undo, and stock pile)
+                    // Bottom row (menu, pause, undo, and stock pile)
                     HStack {
                         // Menu button on the bottom left
                         NavigationLink(destination: ContentView()) {
 
                             Text("menu")
-                                .font(.custom("TAN - MON CHERI", size: 17))
+                                .font(.custom("TAN - MON CHERI", size: 15))
                                 .foregroundColor(.black)
                                 .padding()
-                                .frame(width: geometry.size.width * 0.3)
+                                .frame(width: geometry.size.width * 0.24)
                                 .background(Color(hex: "#5ab2a1"))
                                 .cornerRadius(20)
                         }
                         .padding(.leading, 10)
                         Spacer()
 
-                        // Hint Button
-                        Button(action: {}) {
-                            Text("hint")
-                                .font(.custom("TAN - MON CHERI", size: 17))
+                        // Pause Button
+                        Button(action: {
+                            togglePause()
+                        }) {
+                            Text("pause")
+                                .font(.custom("TAN - MON CHERI", size: 15))
                                 .foregroundColor(.black)
                                 .padding()
-                                .frame(width: geometry.size.width * 0.2)
+                                .frame(width: geometry.size.width * 0.24)
                                 .background(Color(hex: "#5ab2a1"))
                                 .cornerRadius(20)
                         }
@@ -169,19 +172,56 @@ struct GameView: View {
                     }
                     .padding(.bottom, 20)
                 } // VStack end
-            } // ZStack end
-            .alert(isPresented: $viewModel.gameWon) {
-                Alert(
-                    title: Text("Congratulations!"),
-                    message: Text("You have won the game!"),
-                    primaryButton: .default(Text("New Deal?")) {
-                        startNewDeal() // Restart the game
-                    },
-                    secondaryButton: .cancel(Text("Return Home")){
-                        navigateToHome = true
+                
+                if isPaused{
+                    Color.black.opacity(0.5)
+                        .edgesIgnoringSafeArea(.all)
+                        .onTapGesture {
+                            togglePause()
+                        }
+                    VStack(spacing: 20){
+                        Text("Game Paused")
+                            .font(.custom("TAN - MON CHERI", size: 40))
+                            .foregroundColor(Color(hex: "fffbed"))
+                        Text("Tap Screen to Continue")
+                            .font(.custom("TAN - MON CHERI", size: 28))
+                            .foregroundColor(Color(hex: "fffbed"))
                     }
-                )
+                }
+            } // ZStack end
+            .alert(isPresented: Binding<Bool>(
+                get: { viewModel.currentAlert != .none},
+                set: { if !$0 {viewModel.currentAlert = .none}})) {
+                    switch viewModel.currentAlert {
+                    case .win:
+                        stopTimer()
+                        let formattedTime = timerString(from: elapsedTime)
+                        return Alert(
+                            title: Text("Congratulations!"),
+                            message: Text("You have won the game!\nTime: \(formattedTime)\nScore: \(viewModel.score)"),
+                            primaryButton: .default(Text("New Deal?")) {
+                                startNewDeal() // Restart the game
+                            },
+                            secondaryButton: .cancel(Text("Return Home")){
+                                navigateToHome = true
+                            }
+                        )
+                    case .noMovesLeft:
+                        return Alert(
+                            title: Text("No Moves Left"),
+                            message: Text("Would you like to start a new game?"),
+                            primaryButton: .default(Text("New Game")){
+                                startNewDeal()
+                            },
+                            secondaryButton: .cancel(Text("Return Home")){
+                                navigateToHome = true
+                            }
+                        )
+                    default:
+                        return Alert(title: Text("")) // Fallback empty alert
+                    }
             }
+            
             .navigationDestination(isPresented: $navigateToHome){
                 ContentView()
             }
@@ -191,11 +231,6 @@ struct GameView: View {
          }
          .onDisappear {
              stopTimer() // Stop the timer when the view disappears
-         }
-         .onReceive(viewModel.$gameWon) { won in
-             if won {
-                 stopTimer() // Stop the timer when the game is won
-             }
          }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
@@ -227,6 +262,16 @@ struct GameView: View {
         viewModel.startNewGame()
         elapsedTime = 0 // Reset the timer
         startTimer() // Restart the timer
+    }
+    
+    // Helper function for pause
+    private func togglePause() {
+        isPaused.toggle()
+        if isPaused {
+            stopTimer()
+        } else{
+            startTimer()
+        }
     }
 }
 

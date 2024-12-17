@@ -36,7 +36,11 @@ struct InstructionsView: View {
                         .background(Color(hex:"#F93822"))
                         .cornerRadius(10)
                 }
-                NavigationLink(destination: GameView()){
+                NavigationLink(destination: GameView(viewModel: {
+                    let newGameViewModel = GameViewModel()
+                    newGameViewModel.startNewGame() // Explicitly start a new game
+                    return newGameViewModel
+                }())) {
                     Text("Play new deal")
                         .font(.custom("TAN - MON CHERI", size: 23))
                         .foregroundColor(.black)
@@ -44,6 +48,8 @@ struct InstructionsView: View {
                         .background(Color(hex:"#D6001C"))
                         .cornerRadius(10)
                 }
+                
+                
             }
             .padding(.bottom, 40)
         }
