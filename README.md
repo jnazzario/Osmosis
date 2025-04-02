@@ -1,5 +1,4 @@
 # Osmosis
-CPSC 491 Capstone Project
 A modern take on the classic Osmosis Solitaire, built with Swift and SwiftUI.
 
 # Overview
